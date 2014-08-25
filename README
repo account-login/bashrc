@@ -1,0 +1,4 @@
+if [ -r ~/tz.bashrc ]; then
+	. ~/tz.bashrc
+fi
+
