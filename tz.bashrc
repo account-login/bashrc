@@ -3,8 +3,8 @@
 # PS1='${debian_chroot:+($debian_chroot)}\h:\w\$ '
 umask 022
 
-have_n_run() { have "$@" && "$@"; }
-have_n_source()
+run_if_have() { have "$@" && "$@"; }
+source_if_have()
 {
 	while [ -n "$1" ]
 	do
@@ -14,17 +14,17 @@ have_n_source()
 }
 
 # bash-completion
-have_n_source /etc/bash_completion
-have_n_source /usr/share/bash-completion/bash_completion
+source_if_have /etc/bash_completion
+source_if_have /usr/share/bash-completion/bash_completion
 
-have() { which "$@" &>/dev/null; }	# this function must be after bash_completion
+have_cmd() { which "$@" &>/dev/null; }	# this function must be after bash_completion
 
 tilde() { echo "${1/$HOME/~}"; } # /home/xxx/a -> ~/a
 
 # TTY & PTS
 if tty -s; then
-	TTY=`tty`
-	PTS=${TTY##/dev/}
+	TTY="$(tty)"
+	PTS="${TTY##/dev/}"
 	[ "$PTS" == "$TTY" ] && unset PTS
 fi
 
@@ -83,7 +83,7 @@ alias  d='ls -dA */ .*/'
 _ls() { shift; _longopt ls "$@"; }
 complete -F _ls l{,s,l,t,a,h,.} d
 
-shopt -s autocd	# cd into dir by type dir w/o cd
+shopt -s autocd	# cd into dir by type dir without cd
 alias ..='cd ..'
 alias ....='cd ../..'
 alias md='mkdir -pv'
@@ -114,25 +114,24 @@ alias ping='ping -n'
 alias k=killall
 
 # less
-have lesspipe && eval "$(lesspipe)"
+have_cmd lesspipe && eval "$(lesspipe)"
 
 # PATH
 export PATH="$PATH:~/scripts"
 
 # colorgcc
-have colorgcc && alias gcc='colorgcc -Wall'
+have_cmd colorgcc && alias gcc='colorgcc -Wall'
 
 # cdargs
-have_n_source /usr/share/doc/cdargs/examples/cdargs-bash.sh	# debian
-have_n_source /usr/share/cdargs/cdargs-lib.sh	# cygwin
-have_n_source /usr/share/cdargs/cdargs-alias.sh	# cygwin
-alias cv=cdb &&
-export CDARGS_BASH_ALIASES='cdb cv'
-have_n_source /usr/share/cdargs/cdargs-bash-completion.sh	# cygwin
+source_if_have /usr/share/doc/cdargs/examples/cdargs-bash.sh	# debian
+source_if_have /usr/share/cdargs/cdargs-lib.sh	# cygwin
+source_if_have /usr/share/cdargs/cdargs-alias.sh	# cygwin
+alias cv=cdb && export CDARGS_BASH_ALIASES='cdb cv'
+source_if_have /usr/share/cdargs/cdargs-bash-completion.sh	# cygwin
 
 
 # battery
-have_n_source /root/scripts/battery.sh
+source_if_have /root/scripts/battery.sh
 
 # history
 HISTFILESIZE=20000
