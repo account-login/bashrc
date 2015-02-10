@@ -17,7 +17,7 @@ source_if_have()
 source_if_have /etc/bash_completion
 source_if_have /usr/share/bash-completion/bash_completion
 
-have_cmd() { which "$@" &>/dev/null; }	# this function must be after bash_completion
+have_cmd() { which "$@" &>/dev/null; }
 
 tilde() { echo "${1/$HOME/~}"; } # /home/xxx/a -> ~/a
 
@@ -115,6 +115,9 @@ alias k=killall
 
 # less
 have_cmd lesspipe && eval "$(lesspipe)"
+
+# most
+have_cmd most && export PAGER=most
 
 # PATH
 export PATH="$PATH:~/scripts"
