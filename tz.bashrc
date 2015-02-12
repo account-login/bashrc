@@ -1,9 +1,11 @@
-# Note: PS1 and umask are already set in /etc/profile. You should not
-# need this unless you want different defaults for root.
-# PS1='${debian_chroot:+($debian_chroot)}\h:\w\$ '
+# my bashrc
+
+# apt-get install colorgcc colordiff most cdargs psmisc bash-completion
+
 umask 022
 
-run_if_have() { have "$@" && "$@"; }
+have_cmd() { which "$@" &>/dev/null; }
+run_if_have() { have_cmd "$@" && "$@"; }
 source_if_have()
 {
 	while [ -n "$1" ]
@@ -16,8 +18,6 @@ source_if_have()
 # bash-completion
 source_if_have /etc/bash_completion
 source_if_have /usr/share/bash-completion/bash_completion
-
-have_cmd() { which "$@" &>/dev/null; }
 
 tilde() { echo "${1/$HOME/~}"; } # /home/xxx/a -> ~/a
 
@@ -32,10 +32,9 @@ PROMPT_COMMAND="${PROMPT_COMMAND:-:}" # : cmd
 
 title() { echo -en "\033]2;$@\007"; } # set term title
 
-#PROMPT_COMMAND="$PROMPT_COMMAND ; "'title "$HOSTNAME:`basename "$PWD"`" "($LINENO)"'
 PROMPT_COMMAND="$PROMPT_COMMAND ; "'title "$PTS@$HOSTNAME:"`tilde "$PWD"`"" "($LINENO)"'
 
-#have dircolors && eval "`dircolors`"
+# have dircolors && eval "`dircolors`"
 
 LS_OPTIONS='--color=auto -v'
 # ls, add -l if non-option arg <= 3 && >0
@@ -119,11 +118,14 @@ have_cmd lesspipe && eval "$(lesspipe)"
 # most
 have_cmd most && export PAGER=most
 
-# PATH
-export PATH="$PATH:~/scripts"
+# colordiff
+have_cmd colordiff && alias diff='colordiff'
 
 # colorgcc
 have_cmd colorgcc && alias gcc='colorgcc -Wall'
+
+# PATH
+export PATH="$PATH:~/scripts"
 
 # cdargs
 source_if_have /usr/share/doc/cdargs/examples/cdargs-bash.sh	# debian
@@ -180,6 +182,7 @@ PS1='\e[1;33m\u\e[m$(rcode=$?;
 		echo -n "$ "
 	)'
 
+# non-generic bashrc
 if [ -r ~/site.bashrc ]; then
 	. ~/site.bashrc
 fi
