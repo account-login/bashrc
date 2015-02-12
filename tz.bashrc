@@ -1,6 +1,9 @@
+
 # my bashrc
 
-# apt-get install colorgcc colordiff most cdargs psmisc bash-completion
+# prerequisites:
+# apt-get install colorgcc colordiff less most cdargs psmisc bash-completion
+# pip install diff-highlight
 
 umask 022
 
@@ -34,7 +37,7 @@ title() { echo -en "\033]2;$@\007"; } # set term title
 
 PROMPT_COMMAND="$PROMPT_COMMAND ; "'title "$PTS@$HOSTNAME:"`tilde "$PWD"`"" "($LINENO)"'
 
-# have dircolors && eval "`dircolors`"
+# have_cmd dircolors && eval "`dircolors`"
 
 LS_OPTIONS='--color=auto -v'
 # ls, add -l if non-option arg <= 3 && >0
@@ -98,7 +101,6 @@ alias cp='cp -iv'
 alias mv='mv -iv'
 alias ln='ln -iv'
 alias rd='rm -rfv --one-file-system'
-#complete -F _longopt rd
 
 alias chmod='chmod --preserve-root --changes'
 alias chown='chown --preserve-root --changes'
@@ -116,7 +118,23 @@ alias k=killall
 have_cmd lesspipe && eval "$(lesspipe)"
 
 # most
-have_cmd most && export PAGER=most
+# have_cmd most && export PAGER=most
+
+# pager
+if have_cmd most; then
+	PAGER=most
+elif have_cmd less; then
+	PAGER=less
+else
+	PAGER=more
+fi
+export PAGER
+
+# git pager
+if have_cmd diff-highlight; then
+	# export GIT_PAGER="diff-highlight | $PAGER"
+	export GIT_PAGER="diff-highlight | less" # most 效果不好
+fi
 
 # colordiff
 have_cmd colordiff && alias diff='colordiff'
@@ -186,4 +204,3 @@ PS1='\e[1;33m\u\e[m$(rcode=$?;
 if [ -r ~/site.bashrc ]; then
 	. ~/site.bashrc
 fi
-
