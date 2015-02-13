@@ -117,23 +117,29 @@ alias k=killall
 # less
 have_cmd lesspipe && eval "$(lesspipe)"
 
-# most
-# have_cmd most && export PAGER=most
-
 # pager
-if have_cmd most; then
-	PAGER=most
-elif have_cmd less; then
+PAGER=more
+if have_cmd less; then
 	PAGER=less
-else
-	PAGER=more
+	# display color
+	LESS="-R"
+	# don't clear screen when quit, mouse wheel not working
+	#LESS="$LESS --no-init"
+	# quit if the entire file can be displayed on the first screen, must be used with --no-init
+	#LESS="$LESS --quit-if-one-screen"
+	export LESS
 fi
 export PAGER
 
+# colored manpage
+if have_cmd most; then
+	man() { PAGER=most command man "$@"; }
+fi
+
 # git pager
 if have_cmd diff-highlight; then
-	# export GIT_PAGER="diff-highlight | $PAGER"
-	export GIT_PAGER="diff-highlight | less" # most 效果不好
+	export GIT_PAGER="diff-highlight | $PAGER"
+	#export GIT_PAGER="diff-highlight | less" # most 效果不好
 fi
 
 # colordiff
@@ -173,7 +179,7 @@ fi
 
 # tabstop=4
 tabs 4 &>/dev/null
-alias less='less -x4'
+#alias less='less -x4'
 
 # expand **
 shopt -s globstar
