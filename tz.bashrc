@@ -123,6 +123,8 @@ if have_cmd less; then
 	PAGER=less
 	# display color
 	LESS="-R"
+	# tabstop=4
+	LESS="$LESS -x4"
 	# don't clear screen when quit, mouse wheel not working
 	#LESS="$LESS --no-init"
 	# quit if the entire file can be displayed on the first screen, must be used with --no-init
