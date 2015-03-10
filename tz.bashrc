@@ -5,6 +5,9 @@
 # apt-get install colorgcc colordiff less most cdargs psmisc bash-completion
 # pip install diff-highlight
 
+# todo:
+# test non-root account
+
 umask 022
 
 have_cmd() { which "$@" &>/dev/null; }
@@ -93,7 +96,7 @@ alias du1='du --max-depth=1'
 
 GREP_OPTIONS='--color=auto'
 alias grep="grep $GREP_OPTIONS"
-alias g="LC_ALL=C grep -P"
+alias g="grep -P"
 
 # Some more alias to show mistakes:
 alias rm='rm -v --one-file-system'
@@ -106,7 +109,7 @@ alias chmod='chmod --preserve-root --changes'
 alias chown='chown --preserve-root --changes'
 alias chgrp='chgrp --preserve-root --changes'
 
-alias wget='wget --continue'
+#alias wget='wget --continue'
 alias ngrep='ngrep -W byline -e'
 alias ng=ngrep
 alias myip='echo $(curl -s bot.whatismyipaddress.com)'
