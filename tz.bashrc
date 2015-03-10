@@ -126,6 +126,8 @@ if have_cmd less; then
 	PAGER=less
 	# display color
 	LESS="-R"
+	# tabstop=4
+	LESS="$LESS -x4"
 	# don't clear screen when quit, mouse wheel not working
 	#LESS="$LESS --no-init"
 	# quit if the entire file can be displayed on the first screen, must be used with --no-init
@@ -175,8 +177,9 @@ PROMPT_COMMAND="$PROMPT_COMMAND ; history -a; history -c; history -r"
 
 # remove redundant histories
 if [ -n "$HISTFILE" ]; then
+	echo 'echo can not source/execute bash_history; exit' >"$HISTFILE".pid$$
 	tac "$HISTFILE" |nl |sort -uk 2 |sort -h |sed -r 's/^ +[0-9]+\t+//' \
-	|tac >"$HISTFILE".pid$$ &&
+	|tac >>"$HISTFILE".pid$$ &&
 	\mv -f "$HISTFILE".pid$$ "$HISTFILE"
 fi
 
