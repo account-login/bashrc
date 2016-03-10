@@ -88,7 +88,7 @@ alias  d='ls -dA */ .*/'
 _ls() { shift; _longopt ls "$@"; }
 complete -F _ls l{,s,l,t,a,h,.} d
 
-shopt -s autocd	# cd into dir by type dir without cd
+#shopt -s autocd	# cd into dir by type dir without cd
 alias ..='cd ..'
 alias ....='cd ../..'
 alias md='mkdir -pv'
@@ -192,7 +192,7 @@ shopt -s globstar
 
 pst()
 {
-  pstree -halG "$@"|grep --color=never -oP '^.*\S(?=\s*$)'
+	pstree -halG "$@"|grep --color=never -oP '^.*\S(?=\s*$)'
 }
 
 PS1='\e[1;33m\u\e[m$(rcode=$?;
