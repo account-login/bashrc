@@ -173,7 +173,10 @@ HISTSIZE=1000
 HISTCONTROL=erasedups:ignoredups # remove duplicate histories
 shopt -s histappend
 shopt -s histverify # edit b4 run cmd
-PROMPT_COMMAND="$PROMPT_COMMAND ; history -a; history -c; history -r"
+# read history every time is dangerous, up arrow will not work as expected.
+# PROMPT_COMMAND="$PROMPT_COMMAND ; history -a; history -c; history -r"
+# write history after every command.
+PROMPT_COMMAND="$PROMPT_COMMAND ; history -a"
 
 # remove redundant histories
 if [ -n "$HISTFILE" ]; then
