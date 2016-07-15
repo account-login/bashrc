@@ -31,7 +31,9 @@ tilde() { echo "${1/$HOME/~}"; } # /home/xxx/a -> ~/a
 if tty -s; then
 	TTY="$(tty)"
 	PTS="${TTY##/dev/}"
-	[ "$PTS" == "$TTY" ] && unset PTS
+	if [ "$PTS" == "$TTY" ]; then
+		unset PTS
+	fi
 fi
 
 PROMPT_COMMAND="${PROMPT_COMMAND:-:}" # : cmd
@@ -198,24 +200,33 @@ pst()
 	pstree -halG "$@"|grep --color=never -oP '^.*\S(?=\s*$)'
 }
 
-PS1='\e[1;33m\u\e[m$(rcode=$?;
-	[ $rcode -gt 128 ] &&
-		signal=$(builtin kill -l $rcode 2>/dev/null) &&
-		[ x$signal != x ] &&
-			signal=':'${signal:3};
-	[ $rcode != 0 ] &&
-		echo -n "\e[m[\e[1;31m$rcode\e[1;33m$signal\e[m]" ||
-		echo -n "@")$(
-	[ -n "$STY" ] &&
-		sty="\e[m\e[1;32m${STY#*.}\e[m" &&
-		echo -n "$sty|"
+PS1='\e[1;33m\u\e[m$(
+		rcode=$?;
+		if [ $rcode -gt 128 ]; then
+			signal=$(builtin kill -l $rcode 2>/dev/null)
+			if [ x$signal != x ]; then
+				signal=':'${signal:3}
+			fi
+		fi
+		if [ $rcode != 0 ]; then
+			echo -n "\e[m[\e[1;31m$rcode\e[1;33m$signal\e[m]"
+		else
+			echo -n "@"
+		fi
+	)$(
+		if [ -n "$STY" ]; then
+			sty="\e[m\e[1;32m${STY#*.}\e[m"
+			echo -n "$sty|"
+		fi
 	)\e[m\e[1;32m\h\e[m:\e[1;32m\w\e[m\n$(
-	[ $EUID == 0 ] &&
-		echo -n "￥" ||
-		echo -n "$ "
+		if [ $EUID == 0 ]; then
+			echo -n "￥"
+		else
+			echo -n "$ "
+		fi
 	)'
 
-# non-generic bashrc
+# site specific bashrc
 if [ -r ~/site.bashrc ]; then
 	. ~/site.bashrc
 fi
