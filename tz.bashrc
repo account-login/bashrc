@@ -137,6 +137,8 @@ if have_cmd less; then
 	export LESS
 fi
 export PAGER
+# unicode support for less
+export LESSCHARSET=utf-8 less
 
 # colored manpage
 if have_cmd most; then
