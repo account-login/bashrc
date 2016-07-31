@@ -88,7 +88,9 @@ alias l.='ls -d .*'
 alias  d='ls -dA */ .*/'
 # l* alias completion
 _ls() { shift; _longopt ls "$@"; }
-complete -F _ls l{,s,l,t,a,h,.} d
+if type _longopt 2>&1 >/dev/null; then
+	complete -F _ls l{,s,l,t,a,h,.} d
+fi
 
 #shopt -s autocd	# cd into dir by type dir without cd
 alias ..='cd ..'
