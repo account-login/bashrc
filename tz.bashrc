@@ -6,8 +6,63 @@
 # pip install diff-highlight
 
 # todo:
-# test non-root account
+# test with non-root user
 
+
+# some functions for fun
+function assert()
+{
+	local exp="$1"
+	local msg="$2"
+
+	if ! eval "$exp"; then
+		echo "Assertion failed: exp='$exp', msg='$msg'" 1>&2
+	fi
+}
+
+function strlen()
+{
+	local str="$1"
+	echo "${#str}"
+}
+
+function strchr()
+{
+	local str="$1"
+	local chr="$2"
+	assert "[[ \$(strlen "$chr") == 1 ]]" "Illegal char='$chr'"
+	local -i len=$(strlen "$str")
+
+	local -i n
+	for n in $(seq 0 $(( $len - 1 )) ); do
+		if [[ "${str:$n:1}" == "$chr" ]]; then
+			echo $n
+			return
+		fi
+	done
+	echo -1
+}
+
+function strstr()
+{
+	local s1="$1"
+	local s2="$2"
+	assert "[[ -n '$s2' ]]" "\$s2 shoud not be empty"
+	local -i end=$(( $(strlen "$s1") - $(strlen "$s2") ))
+	local -i len2=$(strlen "$s2")
+
+	local -i n
+	for n in $(seq 0 $end); do
+		if [[ "${s1:$n:$len2}" == "$2" ]]; then
+			echo $n
+			return
+		fi
+	done
+	echo -1;
+}
+
+# begin bashrc begins
+# begin bashrc begins
 umask 022
 
 have_cmd() { which "$@" &>/dev/null; }
@@ -61,7 +116,7 @@ ls()
 			if [[ $allarg == 0 ]] && [[ "$v" == -* ]]; then
 				continue
 			fi
-			
+
 			let c++
 			if [ $c -gt $maxfile ]; then
 				break 2
@@ -204,9 +259,10 @@ shopt -s globstar
 
 pst()
 {
-	pstree -halG "$@"|grep --color=never -oP '^.*\S(?=\s*$)'
+	pstree -halG "$@" |grep --color=never -oP '^.*\S(?=\s*$)'
 }
 
+# prompt
 PS1='\e[1;33m\u\e[m$(
 		rcode=$?;
 		if [ $rcode -gt 128 ]; then
