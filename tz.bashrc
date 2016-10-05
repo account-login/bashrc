@@ -153,6 +153,12 @@ if have_cmd diff-highlight; then
 	#export GIT_PAGER="diff-highlight | less" # most 效果不好
 fi
 
+# git aliases
+alias gits='git status'
+alias gitc='git commit -am'
+alias gitd='git diff'
+alias gitl='git log'
+
 # colordiff
 have_cmd colordiff && alias diff='colordiff'
 
