@@ -2,7 +2,7 @@
 # my bashrc
 
 # prerequisites:
-# apt-get install colorgcc colordiff less most cdargs psmisc bash-completion
+# apt-get install colordiff less most cdargs psmisc bash-completion
 # pip install diff-highlight
 
 # todo:
@@ -155,9 +155,6 @@ fi
 
 # colordiff
 have_cmd colordiff && alias diff='colordiff'
-
-# colorgcc
-have_cmd colorgcc && alias gcc='colorgcc -Wall'
 
 # PATH
 export PATH="$PATH:~/scripts"
