@@ -210,6 +210,7 @@ fi
 # git aliases
 alias gits='git status'
 function gitc() { git commit -am "$(echo "$@")"; }	# arguments of gitc will be joined
+alias gitamend='git commit -a --amend --no-edit'
 alias gitd='git diff'
 alias gitl='git log'
 
