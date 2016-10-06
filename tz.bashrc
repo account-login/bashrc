@@ -62,7 +62,6 @@ function strstr()
 }
 
 # begin bashrc begins
-# begin bashrc begins
 umask 022
 
 have_cmd() { which "$@" &>/dev/null; }
@@ -210,7 +209,7 @@ fi
 
 # git aliases
 alias gits='git status'
-alias gitc='git commit -am'
+function gitc() { git commit -am "$(echo "$@")"; }	# arguments of gitc will be joined
 alias gitd='git diff'
 alias gitl='git log'
 
