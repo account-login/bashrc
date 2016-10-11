@@ -13,7 +13,7 @@
 
 Works best with these packages installed
 ```bash
-apt-get install colorgcc colordiff less most cdargs psmisc bash-completion
+apt-get install colordiff less most cdargs psmisc bash-completion
 pip install diff-highlight
 ```
 
