@@ -262,8 +262,14 @@ pst()
 	pstree -halG "$@" |grep --color=never -oP '^.*\S(?=\s*$)'
 }
 
+# colors
+COLOR_YELLOW=$'\e[1;33m'
+COLOR_RED=$'\e[1;31m'
+COLOR_GREEN=$'\e[1;32m'
+COLOR_NO=$'\e[m'
+
 # prompt
-PS1='\e[1;33m\u\e[m$(
+PS1='${COLOR_YELLOW}\u${COLOR_NO}$(
 		rcode=$?;
 		if [ $rcode -gt 128 ]; then
 			signal=$(builtin kill -l $rcode 2>/dev/null)
@@ -272,16 +278,16 @@ PS1='\e[1;33m\u\e[m$(
 			fi
 		fi
 		if [ $rcode != 0 ]; then
-			echo -n "\e[m[\e[1;31m$rcode\e[1;33m$signal\e[m]"
+			echo -n "[${COLOR_RED}$rcode${COLOR_YELLOW}$signal${COLOR_NO}]"
 		else
 			echo -n "@"
 		fi
 	)$(
 		if [ -n "$STY" ]; then
-			sty="\e[m\e[1;32m${STY#*.}\e[m"
+			sty="${COLOR_GREEN}${STY#*.}${COLOR_NO}"
 			echo -n "$sty|"
 		fi
-	)\e[m\e[1;32m\h\e[m:\e[1;32m\w\e[m\n$(
+	)${COLOR_GREEN}\h${COLOR_NO}:${COLOR_GREEN}\w${COLOR_NO}\n$(
 		if [ $EUID == 0 ]; then
 			echo -n "￥"
 		else
