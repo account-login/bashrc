@@ -268,10 +268,30 @@ COLOR_RED=$'\e[1;31m'
 COLOR_GREEN=$'\e[1;32m'
 COLOR_NO=$'\e[m'
 
+function cygdrive_to_win() {
+    local path="$1"
+
+    case "$path" in
+    /cygdrive/?)
+        path="${path}/" # /cygdrive/h -> /cygdrive/h/
+    esac
+
+    case "$path" in
+    /cygdrive/?/*)
+        local path="${path#/cygdrive/}" # /cygdrive/h/abc/xyz -> h/abc/xyz
+        path="${path/\//:\\}"   # h/abc/xyz -> h:\abc/xyz
+        path="${path//\//\\}"   # h:\abc/xyz -> h:\abc\xyz
+        path="${path^?}"        # h:\abc\xyz -> H:\abc\xyz
+    esac
+
+    echo "$path"
+}
+
 # prompt
-PS1='${COLOR_YELLOW}\u${COLOR_NO}$(
-        rcode=$?;
+PS1='${COLOR_YELLOW}\u${COLOR_NO}$(     # user name
+        rcode=$?;   # return code of last command
         if [ $rcode -gt 128 ]; then
+            # get signal name from return code
             signal=$(builtin kill -l $rcode 2>/dev/null)
             if [ x$signal != x ]; then
                 signal=':'${signal:3}
@@ -285,9 +305,11 @@ PS1='${COLOR_YELLOW}\u${COLOR_NO}$(
     )$(
         if [ -n "$STY" ]; then
             sty="${COLOR_GREEN}${STY#*.}${COLOR_NO}"
-            echo -n "$sty|"
+            echo -n "$sty|"     # screen
         fi
-    )${COLOR_GREEN}\h${COLOR_NO}:${COLOR_GREEN}\w${COLOR_NO}\n$(
+    )${COLOR_GREEN}\h${COLOR_NO}:${COLOR_GREEN}$(   # host name
+        cygdrive_to_win "$PWD"  # pwd
+    )${COLOR_NO}\n$(
         if [ $EUID == 0 ]; then
             echo -n "￥"
         else
