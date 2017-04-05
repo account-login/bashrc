@@ -10,8 +10,7 @@
 
 
 # some functions for fun
-function assert()
-{
+function assert() {
     local exp="$1"
     local msg="$2"
 
@@ -20,14 +19,12 @@ function assert()
     fi
 }
 
-function strlen()
-{
+function strlen() {
     local str="$1"
     echo "${#str}"
 }
 
-function strchr()
-{
+function strchr() {
     local str="$1"
     local chr="$2"
     assert "[[ \$(strlen "$chr") == 1 ]]" "Illegal char='$chr'"
@@ -43,8 +40,7 @@ function strchr()
     echo -1
 }
 
-function strstr()
-{
+function strstr() {
     local s1="$1"
     local s2="$2"
     assert "[[ -n '$s2' ]]" "\$s2 shoud not be empty"
@@ -66,8 +62,7 @@ umask 022
 
 have_cmd() { which "$@" &>/dev/null; }
 run_if_have() { have_cmd "$@" && "$@"; }
-source_if_have()
-{
+source_if_have() {
     while [ -n "$1" ]
     do
         [ -r "$1" ] && . "$1"
@@ -101,8 +96,7 @@ PROMPT_COMMAND="$PROMPT_COMMAND ; "'title "$PTS@$HOSTNAME:"`tilde "$PWD"`"" "($L
 LS_OPTIONS='--color=auto -v'
 # ls, add -l if non-option arg <= 3 && >0
 unalias ls 2>/dev/null
-ls()
-{
+ls() {
     local extra_opt v c=0 maxfile=3 allarg=0
 
     for v in "$@"
@@ -198,7 +192,7 @@ export LESSCHARSET=utf-8 less
 
 # colored manpage
 if have_cmd most; then
-    man() { PAGER=most command man "$@"; }
+    function man() { PAGER=most command man "$@"; }
 fi
 
 # git pager
@@ -222,7 +216,7 @@ export PATH="$PATH:~/scripts"
 
 # cdargs
 source_if_have /usr/share/doc/cdargs/examples/cdargs-bash.sh    # debian
-source_if_have /usr/share/cdargs/cdargs-lib.sh  # cygwin
+source_if_have /usr/share/cdargs/cdargs-lib.sh      # cygwin
 source_if_have /usr/share/cdargs/cdargs-alias.sh    # cygwin
 alias cv=cdb && export CDARGS_BASH_ALIASES='cdb cv'
 source_if_have /usr/share/cdargs/cdargs-bash-completion.sh  # cygwin
@@ -247,7 +241,7 @@ if [ -n "$HISTFILE" ]; then
     echo 'echo can not source/execute bash_history; exit' >"$HISTFILE".pid$$
     tac "$HISTFILE" |nl |sort -uk 2 |sort -h |sed -r 's/^ +[0-9]+\t+//' \
     |tac >>"$HISTFILE".pid$$ &&
-    \mv -f "$HISTFILE".pid$$ "$HISTFILE"
+    command mv -f "$HISTFILE".pid$$ "$HISTFILE"
 fi
 
 # tabstop=4
@@ -257,8 +251,7 @@ tabs 4 &>/dev/null
 # expand **
 shopt -s globstar
 
-pst()
-{
+pst() {
     pstree -halG "$@" |grep --color=never -oP '^.*\S(?=\s*$)'
 }
 
