@@ -74,7 +74,17 @@ source_if_have() {
 source_if_have /etc/bash_completion
 source_if_have /usr/share/bash-completion/bash_completion
 
-tilde() { echo "${1/$HOME/~}"; } # /home/xxx/a -> ~/a
+function tilde() {
+    case "$1" in
+    $HOME|$HOME/*)
+        local hl=${#HOME}
+        echo "~${1:$hl}"
+        ;;
+    *)
+        echo "$1"
+        ;;
+    esac
+}
 
 # TTY & PTS
 if tty -s; then
@@ -301,7 +311,7 @@ PS1='${COLOR_YELLOW}\u${COLOR_NO}$(     # user name
             echo -n "$sty|"     # screen
         fi
     )${COLOR_GREEN}\h${COLOR_NO}:${COLOR_GREEN}$(   # host name
-        cygdrive_to_win "$PWD"  # pwd
+        tilde "$(cygdrive_to_win "$PWD")"           # pwd
     )${COLOR_NO}\n$(
         if [ $EUID == 0 ]; then
             echo -n "￥"
