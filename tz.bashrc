@@ -60,9 +60,9 @@ function strstr() {
 # begin bashrc begins
 umask 022
 
-have_cmd() { which "$@" &>/dev/null; }
-run_if_have() { have_cmd "$@" && "$@"; }
-source_if_have() {
+function have_cmd() { which "$@" &>/dev/null; }
+function run_if_have() { have_cmd "$@" && "$@"; }
+function source_if_have() {
     while [ -n "$1" ]
     do
         [ -r "$1" ] && . "$1"
@@ -95,9 +95,9 @@ if tty -s; then
     fi
 fi
 
-PROMPT_COMMAND="${PROMPT_COMMAND:-:}" # : cmd
+PROMPT_COMMAND="${PROMPT_COMMAND:-:}"   # : cmd
 
-title() { echo -en "\033]2;$@\007"; } # set term title
+function title() { echo -en "\033]2;$@\007"; }  # set term title
 
 PROMPT_COMMAND="$PROMPT_COMMAND ; "'title "$PTS@$HOSTNAME:"`tilde "$PWD"`"" "($LINENO)"'
 
@@ -261,7 +261,7 @@ tabs 4 &>/dev/null
 # expand **
 shopt -s globstar
 
-pst() {
+function pst() {
     pstree -halG "$@" |grep --color=never -oP '^.*\S(?=\s*$)'
 }
 
