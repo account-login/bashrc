@@ -237,7 +237,7 @@ source_if_have /root/scripts/battery.sh
 
 # history
 HISTFILESIZE=20000
-HISTSIZE=1000
+HISTSIZE=20000
 HISTCONTROL=erasedups:ignoredups # remove duplicate histories
 shopt -s histappend
 shopt -s histverify # edit b4 run cmd
