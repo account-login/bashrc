@@ -3,7 +3,6 @@
 
 # prerequisites:
 # apt-get install colordiff less most cdargs psmisc bash-completion
-# pip install diff-highlight
 
 # todo:
 # test with non-root user
@@ -203,12 +202,6 @@ export LESSCHARSET=utf-8
 # colored manpage
 if have_cmd most; then
     function man() { PAGER=most command man "$@"; }
-fi
-
-# git pager
-if have_cmd diff-highlight; then
-    export GIT_PAGER="diff-highlight | $PAGER"
-    #export GIT_PAGER="diff-highlight | less" # most 效果不好
 fi
 
 # git aliases
