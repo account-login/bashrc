@@ -3,6 +3,7 @@
 
 # prerequisites:
 # apt-get install colordiff less most cdargs psmisc bash-completion
+# https://github.com/account-login/pager_wrapper/
 
 # todo:
 # test with non-root user
@@ -184,7 +185,11 @@ have_cmd lesspipe && eval "$(lesspipe)"
 # pager
 PAGER=more
 if have_cmd less; then
-    PAGER=less
+    if have_cmd pager_wrapper; then
+        PAGER=pager_wrapper
+    else
+        PAGER=less
+    fi
     # display color
     LESS="-R"
     # tabstop=4
