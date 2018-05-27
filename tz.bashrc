@@ -5,9 +5,6 @@
 # apt-get install colordiff less most cdargs psmisc bash-completion
 # https://github.com/account-login/pager_wrapper/
 
-# todo:
-# test with non-root user
-
 
 # some functions for fun
 function assert() {
@@ -259,6 +256,10 @@ tabs 4 &>/dev/null
 # expand **
 shopt -s globstar
 
+# ulimit
+ulimit -c unlimited
+
+# pstree
 function pst() {
     pstree -halG "$@" |grep --color=never -oP '^.*\S(?=\s*$)'
 }
