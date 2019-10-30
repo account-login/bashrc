@@ -57,6 +57,13 @@ function strstr() {
 # begin bashrc begins
 umask 022
 
+# handle crlf on windows
+set -o igncr
+export SHELLOPTS
+
+# python output encoding
+export PYTHONIOENCODING=utf-8
+
 function have_cmd() { which "$@" &>/dev/null; }
 function run_if_have() { have_cmd "$@" && "$@"; }
 function source_if_have() {
@@ -311,11 +318,11 @@ PS1='${COLOR_YELLOW}\u${COLOR_NO}$(     # user name
         fi
     )${COLOR_GREEN}\h${COLOR_NO}:${COLOR_GREEN}$(   # host name
         tilde "$(cygdrive_to_win "$PWD")"           # pwd
-    )${COLOR_NO}\n$(
+    )${COLOR_NO}$(
         if [ $EUID == 0 ]; then
-            echo -n "￥"
+            echo -n $"\n￥"
         else
-            echo -n "$ "
+            echo -n $"\n\$ "
         fi
     )'
 
