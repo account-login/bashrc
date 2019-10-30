@@ -58,7 +58,7 @@ function strstr() {
 umask 022
 
 # handle crlf on windows
-set -o igncr
+set -o igncr 2>/dev/null || :
 export SHELLOPTS
 
 # python output encoding
