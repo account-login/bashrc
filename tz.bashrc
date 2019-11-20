@@ -64,6 +64,9 @@ export SHELLOPTS
 # python output encoding
 export PYTHONIOENCODING=utf-8
 
+# avoid confusing date time format
+export LC_TIME=C
+
 function have_cmd() { which "$@" &>/dev/null; }
 function run_if_have() { have_cmd "$@" && "$@"; }
 function source_if_have() {
