@@ -59,6 +59,8 @@ umask 022
 
 # handle crlf on windows
 set -o igncr 2>/dev/null || :
+# turn off history substitution
+set +H
 export SHELLOPTS
 
 # python output encoding
