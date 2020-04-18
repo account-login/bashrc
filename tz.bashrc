@@ -2,7 +2,7 @@
 # my bashrc
 
 # prerequisites:
-# apt-get install colordiff less most cdargs psmisc bash-completion
+# apt-get install colordiff less cdargs psmisc bash-completion
 # https://github.com/account-login/pager_wrapper/
 
 
@@ -199,8 +199,8 @@ if have_cmd less; then
     else
         PAGER=less
     fi
-    # display color
-    LESS="-R"
+    # display color and verbose prompt
+    LESS="-R -M"
     # tabstop=4
     LESS="$LESS -x4"
     # don't clear screen when quit, mouse wheel not working
@@ -213,9 +213,28 @@ export PAGER
 # unicode support for less
 export LESSCHARSET=utf-8
 
+# termcap terminfo
+# mb      blink     start blink
+# md      bold      start bold
+# me      sgr0      turn off bold, blink and underline
+# so      smso      start standout (reverse video)
+# se      rmso      stop standout
+# us      smul      start underline
+# ue      rmul      stop underline
+
 # colored manpage
-if have_cmd most; then
-    function man() { PAGER=most command man "$@"; }
+if have_cmd less; then
+    function man() {
+        env PAGER=less \
+        LESS_TERMCAP_mb=$'\e[1;31m' \
+        LESS_TERMCAP_md=$'\e[1;31m' \
+        LESS_TERMCAP_me=$'\e[0m' \
+        LESS_TERMCAP_se=$'\e[0m' \
+        LESS_TERMCAP_so=$'\e[1;30;47m' \
+        LESS_TERMCAP_ue=$'\e[0m' \
+        LESS_TERMCAP_us=$'\e[1;4;33m' \
+        man "$@"
+    }
 fi
 
 # git aliases
