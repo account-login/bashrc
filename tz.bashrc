@@ -316,34 +316,46 @@ function cygdrive_to_win() {
 }
 
 # prompt
-PS1='${COLOR_YELLOW}\u${COLOR_NO}$(     # user name
-        rcode=$?;   # return code of last command
-        if [ $rcode -gt 128 ]; then
-            # get signal name from return code
-            signal=$(builtin kill -l $rcode 2>/dev/null)
-            if [ x$signal != x ]; then
-                signal=':'${signal:3}
-            fi
+function _ps1_middle() {
+    local rcode=$?;
+    if [ $rcode -gt 128 ]; then
+        # get signal name from return code
+        signal=$(builtin kill -l $rcode 2>/dev/null)
+        if [ x$signal != x ]; then
+            signal=':'${signal:3}
         fi
-        if [ $rcode != 0 ]; then
-            echo -n "[${COLOR_RED}$rcode${COLOR_YELLOW}$signal${COLOR_NO}]"
-        else
-            echo -n "@"
-        fi
-    )$(
-        if [ -n "$STY" ]; then
-            sty="${COLOR_GREEN}${STY#*.}${COLOR_NO}"
-            echo -n "$sty|"     # screen
-        fi
-    )${COLOR_GREEN}\h${COLOR_NO}:${COLOR_GREEN}$(   # host name
-        tilde "$(cygdrive_to_win "$PWD")"           # pwd
-    )${COLOR_NO}$(
-        if [ $EUID == 0 ]; then
-            echo -n $"\n￥"
-        else
-            echo -n $"\n\$ "
-        fi
-    )'
+    fi
+    # `@` symbol or last return code
+    if [ $rcode != 0 ]; then
+        echo -n "[${COLOR_RED}$rcode${COLOR_YELLOW}$signal${COLOR_NO}]"
+    else
+        echo -n "@"
+    fi
+    # screen
+    if [ -n "$STY" ]; then
+        sty="${COLOR_GREEN}${STY#*.}${COLOR_NO}"
+        echo -n "$sty|"     # screen
+    fi
+}
+
+function _ps1_dollar() {
+    if [ $EUID == 0 ]; then
+        echo -n $'\n￥'
+    else
+        echo -n $'\n$ '
+    fi
+}
+
+PS1=''
+# user_name
+PS1="$PS1"'${COLOR_YELLOW}\u${COLOR_NO}'
+# @
+PS1="$PS1"'$(_ps1_middle)'
+# host
+PS1="$PS1"'${COLOR_GREEN}\h${COLOR_NO}'
+# :pwd
+PS1="$PS1"':${COLOR_GREEN}$(tilde "$(cygdrive_to_win "$PWD")")${COLOR_NO}'
+PS1="$PS1"'$(_ps1_dollar)'
 
 # site specific bashrc
 if [ -r ~/site.bashrc ]; then
