@@ -222,20 +222,15 @@ export LESSCHARSET=utf-8
 # us      smul      start underline
 # ue      rmul      stop underline
 
-# colored manpage
-if have_cmd less; then
-    function man() {
-        env PAGER=less \
-        LESS_TERMCAP_mb=$'\e[1;31m' \
-        LESS_TERMCAP_md=$'\e[1;31m' \
-        LESS_TERMCAP_me=$'\e[0m' \
-        LESS_TERMCAP_se=$'\e[0m' \
-        LESS_TERMCAP_so=$'\e[1;30;47m' \
-        LESS_TERMCAP_ue=$'\e[0m' \
-        LESS_TERMCAP_us=$'\e[1;4;33m' \
-        man "$@"
-    }
-fi
+# less colors
+export LESS_TERMCAP_mb=$'\e[1;31m'
+export LESS_TERMCAP_md=$'\e[1;31m'
+export LESS_TERMCAP_me=$'\e[0m'
+export LESS_TERMCAP_se=$'\e[0m'
+export LESS_TERMCAP_so=$'\e[0;30;48;5;118m'
+export LESS_TERMCAP_ue=$'\e[0m'
+export LESS_TERMCAP_us=$'\e[1;4;33m'
+export GROFF_NO_SGR=1   # for colored man pages
 
 # git aliases
 alias gits='git status'
