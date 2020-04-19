@@ -315,7 +315,6 @@ function cygdrive_to_win() {
     echo "$path"
 }
 
-# prompt
 function _ps1_middle() {
     local rcode=$?;
     if [ $rcode -gt 128 ]; then
@@ -331,31 +330,28 @@ function _ps1_middle() {
     else
         echo -n "@"
     fi
-    # screen
-    if [ -n "$STY" ]; then
-        sty="${COLOR_GREEN}${STY#*.}${COLOR_NO}"
-        echo -n "$sty|"     # screen
-    fi
 }
 
-function _ps1_dollar() {
-    if [ $EUID == 0 ]; then
-        echo -n $'\n￥'
-    else
-        echo -n $'\n$ '
-    fi
-}
-
+# prompt
 PS1=''
 # user_name
 PS1="$PS1"'${COLOR_YELLOW}\u${COLOR_NO}'
 # @
 PS1="$PS1"'$(_ps1_middle)'
+# screen
+if [ -n "$STY" ]; then
+    PS1="$PS1"'${COLOR_GREEN}${STY#*.}${COLOR_NO}|'
+fi
 # host
 PS1="$PS1"'${COLOR_GREEN}\h${COLOR_NO}'
 # :pwd
 PS1="$PS1"':${COLOR_GREEN}$(tilde "$(cygdrive_to_win "$PWD")")${COLOR_NO}'
-PS1="$PS1"'$(_ps1_dollar)'
+# $
+if [ $EUID == 0 ]; then
+    PS1="$PS1"$'\n￥'
+else
+    PS1="$PS1"$'\n$ '
+fi
 
 # site specific bashrc
 if [ -r ~/site.bashrc ]; then
