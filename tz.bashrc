@@ -266,6 +266,14 @@ shopt -s histverify # edit b4 run cmd
 # PROMPT_COMMAND="$PROMPT_COMMAND ; history -a; history -c; history -r"
 # write history after every command.
 PROMPT_COMMAND="$PROMPT_COMMAND ; history -a"
+# backup history file
+function _ts_fmt() {
+    date +'%Y-%m-%d %H:%M:%S.%3N'
+}
+function _backup_history() {
+    echo "$(_ts_fmt) $(printf "% 7s" [$$]) $(history 1)" >>~/.shell_history.log
+}
+PROMPT_COMMAND="$PROMPT_COMMAND ; _backup_history"
 
 # remove redundant histories
 if [ -n "$HISTFILE" ]; then
