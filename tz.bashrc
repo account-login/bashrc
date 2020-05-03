@@ -104,7 +104,7 @@ if tty -s; then
     fi
 fi
 
-PROMPT_COMMAND="${PROMPT_COMMAND:-:}"   # : cmd
+PROMPT_COMMAND=":"
 
 function title() { echo -en "\033]2;$@\007"; }  # set term title
 
