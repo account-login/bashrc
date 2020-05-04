@@ -6,54 +6,6 @@
 # https://github.com/account-login/pager_wrapper/
 
 
-# some functions for fun
-function assert() {
-    local exp="$1"
-    local msg="$2"
-
-    if ! eval "$exp"; then
-        echo "Assertion failed: exp='$exp', msg='$msg'" 1>&2
-    fi
-}
-
-function strlen() {
-    local str="$1"
-    echo "${#str}"
-}
-
-function strchr() {
-    local str="$1"
-    local chr="$2"
-    assert "[[ \$(strlen "$chr") == 1 ]]" "Illegal char='$chr'"
-    local -i len=$(strlen "$str")
-
-    local -i n
-    for n in $(seq 0 $(( $len - 1 )) ); do
-        if [[ "${str:$n:1}" == "$chr" ]]; then
-            echo $n
-            return
-        fi
-    done
-    echo -1
-}
-
-function strstr() {
-    local s1="$1"
-    local s2="$2"
-    assert "[[ -n '$s2' ]]" "\$s2 shoud not be empty"
-    local -i end=$(( $(strlen "$s1") - $(strlen "$s2") ))
-    local -i len2=$(strlen "$s2")
-
-    local -i n
-    for n in $(seq 0 $end); do
-        if [[ "${s1:$n:$len2}" == "$2" ]]; then
-            echo $n
-            return
-        fi
-    done
-    echo -1;
-}
-
 # begin bashrc begins
 umask 022
 
@@ -87,7 +39,7 @@ source_if_have /usr/share/bash-completion/bash_completion
 
 function tilde() {
     case "$1" in
-    $HOME|$HOME/*)
+    "$HOME"|"$HOME"/*)
         local hl=${#HOME}
         echo "~${1:$hl}"
         ;;
@@ -108,20 +60,18 @@ fi
 
 PROMPT_COMMAND=":"
 
-function title() { echo -en "\033]2;$@\007"; }  # set term title
+function title() { echo -en "\033]2;$*\007"; }  # set term title
 
 PROMPT_COMMAND="$PROMPT_COMMAND ; "'title "$PTS@$HOSTNAME:"`tilde "$PWD"`"" "($LINENO)"'
 
 # have_cmd dircolors && eval "`dircolors`"
 
-LS_OPTIONS='--color=auto -v'
 # ls, add -l if non-option arg <= 3 && >0
 unalias ls 2>/dev/null
 ls() {
     local extra_opt v c=0 maxfile=3 allarg=0
 
-    for v in "$@"
-    do
+    for v in "$@"; do
         case "$v" in
         --)
             allarg=1
@@ -131,8 +81,8 @@ ls() {
                 continue
             fi
 
-            let c++
-            if [ $c -gt $maxfile ]; then
+            (( c++ ))
+            if [ "$c" -gt "$maxfile" ]; then
                 break 2
             fi
             if [ -d "$v" ]; then
@@ -142,10 +92,10 @@ ls() {
             ;;
         esac
     done
-    if [ $c -le $maxfile ] && [ $c -gt 0 ]; then
+    if [ "$c" -le "$maxfile" ] && [ "$c" -gt 0 ]; then
         extra_opt='-l'
     fi
-    command ls $LS_OPTIONS $extra_opt "$@"
+    command ls --color=auto -v $extra_opt "$@"
 }
 
 alias ll='ls -la'
@@ -157,7 +107,7 @@ alias l.='ls -d .*'
 alias  d='ls -dA */ .*/'
 # l* alias completion
 _ls() { shift; _longopt ls "$@"; }
-if type _longopt 2>&1 >/dev/null; then
+if type _longopt >/dev/null 2>&1; then
     complete -F _ls l{,s,l,t,a,h,.} d
 fi
 
@@ -167,8 +117,7 @@ alias ....='cd ../..'
 alias md='mkdir -pv'
 alias du1='du --max-depth=1'
 
-GREP_OPTIONS='--color=auto'
-alias grep="grep $GREP_OPTIONS"
+alias grep="grep --color=auto"
 alias g="grep -P"
 
 # Some more alias to show mistakes:
@@ -194,12 +143,12 @@ alias k=killall
 have_cmd lesspipe && eval "$(lesspipe)"
 
 # pager
-PAGER=more
+PAGER="more"
 if have_cmd less; then
     if have_cmd pager_wrapper; then
-        PAGER=pager_wrapper
+        PAGER="pager_wrapper"
     else
-        PAGER=less
+        PAGER="less"
     fi
     # display color and verbose prompt
     LESS="-R -M"
@@ -236,7 +185,7 @@ export GROFF_NO_SGR=1   # for colored man pages
 
 # git aliases
 alias gits='git status'
-function gitc() { git commit -am "$(echo "$@")"; }  # arguments of gitc will be joined
+function gitc() { git commit -am "$*"; }    # arguments of gitc will be joined
 alias gitamend='git commit -a --amend --no-edit'
 alias gitd='git diff'
 alias gitl='git log'
@@ -273,7 +222,7 @@ function _ts_fmt() {
     date +'%Y-%m-%d %H:%M:%S.%3N'
 }
 function _backup_history() {
-    echo "$(_ts_fmt) $(printf "% 7s" [$$]) $(history 1)" >>~/.shell_history.log
+    echo "$(_ts_fmt) $(printf "% 7s" \[$$]) $(history 1)" >>~/.shell_history.log
 }
 PROMPT_COMMAND="$PROMPT_COMMAND ; _backup_history"
 
@@ -333,7 +282,7 @@ function _ps1_middle() {
     if [ $rcode -gt 128 ]; then
         # get signal name from return code
         signal=$(builtin kill -l $rcode 2>/dev/null)
-        if [ x$signal != x ]; then
+        if [ x"$signal" != x ]; then
             signal=':'${signal:3}
         fi
     fi
