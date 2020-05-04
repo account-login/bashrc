@@ -61,6 +61,8 @@ umask 022
 set -o igncr 2>/dev/null || :
 # turn off history substitution
 set +H
+# show failed return code in a pipeline
+set -o pipefail
 export SHELLOPTS
 
 # python output encoding
