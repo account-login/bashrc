@@ -326,7 +326,8 @@ function cygdrive_to_win() {
 }
 
 function _ps1_middle() {
-    local rcode=$?;
+    local rcode=$?
+    local signal=
     if [ $rcode -gt 128 ]; then
         # get signal name from return code
         signal=$(builtin kill -l $rcode 2>/dev/null)
