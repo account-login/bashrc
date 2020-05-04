@@ -276,11 +276,13 @@ function _backup_history() {
 PROMPT_COMMAND="$PROMPT_COMMAND ; _backup_history"
 
 # remove redundant histories
-if [ -n "$HISTFILE" ]; then
+if [ -n "$HISTFILE" ]; then (
+    set -o pipefail
     echo 'echo can not source/execute bash_history; exit' >"$HISTFILE".pid$$
     tac "$HISTFILE" |nl |sort -uk 2 |sort -h |sed -r 's/^ +[0-9]+\t+//' \
     |tac >>"$HISTFILE".pid$$ &&
     command mv -f "$HISTFILE".pid$$ "$HISTFILE"
+)
 fi
 
 # tabstop=4
