@@ -222,7 +222,7 @@ function _ts_fmt() {
     date +'%Y-%m-%d %H:%M:%S.%3N'
 }
 function _backup_history() {
-    echo "$(_ts_fmt) $(printf "% 7s" \[$$]) $(history 1)" >>~/.shell_history.log
+    echo "$(_ts_fmt) $(printf "% 11s" \[pid:$$]) [pwd:$PWD] $(history 1)" >>~/.shell_history.log
 }
 PROMPT_COMMAND="$PROMPT_COMMAND ; _backup_history"
 
