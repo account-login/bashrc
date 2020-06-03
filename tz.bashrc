@@ -49,6 +49,9 @@ function tilde() {
     esac
 }
 
+# overridable hostname for ps1 and title
+ALT_HOST_NAME="${ALT_HOST_NAME:-$HOSTNAME}"
+
 # TTY & PTS
 if tty -s; then
     TTY="$(tty)"
@@ -62,7 +65,7 @@ PROMPT_COMMAND=":"
 
 function title() { echo -en "\033]2;$*\007"; }  # set term title
 
-PROMPT_COMMAND="$PROMPT_COMMAND ; "'title "$PTS@$HOSTNAME:"`tilde "$PWD"`"" "($LINENO)"'
+PROMPT_COMMAND="$PROMPT_COMMAND ; "'title "$PTS@$ALT_HOST_NAME:"`tilde "$PWD"`"" "($LINENO)"'
 
 # have_cmd dircolors && eval "`dircolors`"
 
@@ -305,7 +308,7 @@ if [ -n "$STY" ]; then
     PS1="$PS1"'${COLOR_GREEN}${STY#*.}${COLOR_NO}|'
 fi
 # host
-PS1="$PS1"'${COLOR_GREEN}\h${COLOR_NO}'
+PS1="$PS1"'${COLOR_GREEN}${ALT_HOST_NAME}${COLOR_NO}'
 # :pwd
 PS1="$PS1"':${COLOR_GREEN}$(tilde "$(cygdrive_to_win "$PWD")")${COLOR_NO}'
 # $
