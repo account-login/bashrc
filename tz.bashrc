@@ -140,6 +140,7 @@ alias ng=ngrep
 alias myip='echo $(curl -s bot.whatismyipaddress.com)'
 alias ping='ping -n'
 alias rg='rg --path-separator=/'
+alias fd='fd --path-separator=/'
 
 # less
 have_cmd lesspipe && eval "$(lesspipe)"
