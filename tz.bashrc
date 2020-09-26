@@ -98,7 +98,7 @@ ls() {
     if [ "$c" -le "$maxfile" ] && [ "$c" -gt 0 ]; then
         extra_opt='-l'
     fi
-    command ls --color=auto -v $extra_opt "$@"
+    command ls --color=auto --time-style="+%Y-%m-%d %H:%M:%S" -v $extra_opt "$@"
 }
 
 alias ll='ls -la'
