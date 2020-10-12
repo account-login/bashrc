@@ -286,7 +286,7 @@ function _ps1_middle() {
         # get signal name from return code
         signal=$(builtin kill -l $rcode 2>/dev/null)
         if [ x"$signal" != x ]; then
-            signal=':'${signal:3}
+            signal=':'${signal#SIG}
         fi
     fi
     # `@` symbol or last return code
