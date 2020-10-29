@@ -1,9 +1,10 @@
 
 # my bashrc
 
-# prerequisites:
+# recommended softwares:
 # apt-get install colordiff less cdargs psmisc bash-completion
 # https://github.com/account-login/pager_wrapper/
+# jq rg fd
 
 
 # begin bashrc begins
