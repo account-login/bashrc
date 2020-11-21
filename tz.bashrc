@@ -4,6 +4,7 @@
 # recommended softwares:
 # apt-get install colordiff less cdargs psmisc bash-completion
 # https://github.com/account-login/pager_wrapper/
+# https://github.com/account-login/packer
 # jq rg fd
 
 
