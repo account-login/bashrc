@@ -234,9 +234,10 @@ PROMPT_COMMAND="$PROMPT_COMMAND ; _backup_history"
 # remove redundant histories
 if [ -n "$HISTFILE" ]; then (
     set -o pipefail
+    export LC_ALL=C
     echo 'echo can not source/execute bash_history; exit' >"$HISTFILE".pid$$
     tac "$HISTFILE" |nl |sort -uk 2 |sort -h |sed -r 's/^ +[0-9]+\t+//' \
-    |tac >>"$HISTFILE".pid$$ &&
+        |tac >>"$HISTFILE".pid$$ &&
     command mv -f "$HISTFILE".pid$$ "$HISTFILE"
 )
 fi
