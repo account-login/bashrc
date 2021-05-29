@@ -137,7 +137,7 @@ alias chown='chown --preserve-root --changes'
 alias chgrp='chgrp --preserve-root --changes'
 
 #alias wget='wget --continue'
-alias ngrep='ngrep -W byline -e'
+alias ngrep='ngrep -W byline -e -qt'
 alias ng=ngrep
 alias myip='echo $(curl -s bot.whatismyipaddress.com)'
 alias ping='ping -n'
